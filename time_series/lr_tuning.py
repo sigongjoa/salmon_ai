@@ -68,6 +68,7 @@ def lr_tuning(lr):
     early_stop_callback = EarlyStopping(monitor="val_loss", min_delta=1e-6, patience=10, verbose=False, mode="min")
     logger = TensorBoardLogger(f"lightning_logs/lr_tuning")  # logging results to a tensorboard
 
+    pl.seed_everything(42)
     trainer = pl.Trainer(
         max_epochs=200,
         accelerator="gpu",
@@ -82,10 +83,10 @@ def lr_tuning(lr):
     tft = TemporalFusionTransformer.from_dataset(
         training,
         learning_rate=lr,
-        hidden_size=32,
-        attention_head_size=4,
+        hidden_size=96,
+        attention_head_size=6,
         dropout=0.1,
-        hidden_continuous_size=32,
+        hidden_continuous_size=96,
         loss=QuantileLoss(),
         log_interval=10,  # uncomment for learning rate finder and otherwise, e.g. to 10 for logging every 10 batches
         optimizer="Ranger",
@@ -102,13 +103,13 @@ def lr_tuning(lr):
 
     raw_predictions = tft.predict(val_dataloader, mode="raw", return_x=True , return_y=True ,  trainer_kwargs=dict(accelerator="cpu"))
 
-    fig_save_path = f'./fig/{lr}'
+    fig_save_path = f'./fig/lr_{lr}'
     os.makedirs(fig_save_path, exist_ok=True)
     for idx in range(25):  # plot 10 examples
         fig = tft.plot_prediction(raw_predictions.x, raw_predictions.output, idx=idx, add_loss_to_title=True)
         fig.set_size_inches(14, 6)
-        fig.savefig(fig_save_path + '/{idx}.png')       
+        fig.savefig(fig_save_path + f'/{idx}.png')       
         
-for lr in np.linspace(1e-1 , 1e-9, 60):
+for lr in np.linspace(1e-1 , 1e-8, 20):
     lr_tuning(lr)
    
