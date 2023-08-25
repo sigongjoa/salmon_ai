@@ -107,6 +107,8 @@ def lr_tuning(lr):
     for idx in range(25):  # plot 10 examples
         fig = tft.plot_prediction(raw_predictions.x, raw_predictions.output, idx=idx, add_loss_to_title=True)
         fig.set_size_inches(14, 6)
-        fig.savefig(fig_save_path + '/{idx}.png')
-
-    
+        fig.savefig(fig_save_path + '/{idx}.png')       
+        
+for lr in np.linspace(1e-1 , 1e-9, 60):
+    lr_tuning(lr)
+   
