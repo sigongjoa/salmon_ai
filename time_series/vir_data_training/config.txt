@@ -1,0 +1,1 @@
+{'l_inf_range': (70, 90), 'l_0_range': (5, 7), 'k_range': (0.5, 0.6), 'fl_noise_config': {'noise_scale': 0.05, 'relative_noise_limit': 0.1, 'incremental_noise': 0.01}, 'bd_noise_config': {'noise_scale': 0.003, 'relative_noise_limit': 0.1, 'incremental_noise': 0.001}, 'weight_noise_scale': 0.5, 'trail_num': 0, 'training_count': 4}
